@@ -15,17 +15,29 @@ the bitstream the FASM file would generate.
 
 Installing
 ----------
-After cloning this repo:
-  - `make env` - required python >=3.7 - may have to upgrade and then change Makefile to use new version (same for Invoking below)
-    - To get python3.7 on Ubuntu 16.04 I had to do:
+
+Before cloning this repo, the RapidWright and capnproto-java repos must be installed first.
+
+Follow the instructions to install RapidWright [here](https://github.com/Xilinx/RapidWright) and clone capnproto-java [here](https://github.com/capnproto/capnproto-java).
+
+After RapidWright and capnproto-java are installed, clone this repo and run the following commands:
+  - `make env`: For this to be successful, python3.7 or above is required - you may have to upgrade and then change the Makefile to use the new version (same for Invoking below)
+    - To get python3.7 on Ubuntu 16.04 (or above) do the following:
       - sudo apt update
       - sudo apt install software-properties-common
       - sudo add-apt-repository ppa:deadsnakes/ppa
       - sudo apt update
       - sudo apt install python3.7
-    - Then, had to modify the Makefile to use python3.7 instead of python3
+    - Then, modify the Makefile to use python3.7 instead of python3.
  - `make build`
- - `make test-py` - will run a few tests (6), takes a few minutes
+ - `make test-py` - Before running, go into `.github/workflows/test.sh` and change the directory path from $GITHUB_WORKSPACE to your directory path for CAPN_PATH and INTERCHANGE_SCHEMA_PATH (fpga-interchange-schema is inside `RapidWright/interchange`). It should look something like this when completed:
+
+`export CAPNP_PATH="/home/username/capnproto-java/compiler/src/main/schema/"`
+`export INTERCHANGE_SCHEMA_PATH="/home/username/RapidWright/interchange/fpga-interchange-schema/interchange"`
+
+Source the `test.sh` from the main fasm2bels directory (`source .github/workflows/test.sh`) and `make test-py` will run automatically. It takes a few minutes to run all the tests (22).
+
+ An `OK` should appear at the bottom of the terminal run if successful.
 
 Invoking
 --------
