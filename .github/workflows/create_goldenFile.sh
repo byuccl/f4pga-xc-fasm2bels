@@ -1,3 +1,4 @@
+#!/bin/bash
 source /tools/Xilinx/Vivado/2019.2/settings64.sh 
 vivado -mode batch -source create_goldenFile.tcl
 rm -r *.dcp
