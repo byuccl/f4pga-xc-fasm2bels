@@ -55,8 +55,6 @@ jobs:
           - ./tests/test_data/carry4/top_bit.golden.v
           - ./tests/test_data/pudc/top_bit.golden.v
           - ./tests/equivalence_checking_data/add32/top_bit.golden.v
-          - ./.github/workflows/create_goldenFile.sh
-          - ./.github/workflows/create_goldenFile.tcl
 
     - name: Check formatting
       run: source .github/workflows/format.sh
@@ -88,10 +86,6 @@ jobs:
       run: |
         make build
         make env
-
-    - name: Create GoldenFile
-      run: |
-        source .github/workflows/create_goldenFile.sh
 
     - name: Check conda environment setup
       run: |
