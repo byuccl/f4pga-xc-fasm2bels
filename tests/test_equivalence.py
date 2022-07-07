@@ -1,25 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# Copyright 2021-2022 F4PGA Authors
+# Copyright (C) 2021  The SymbiFlow Authors.
 #
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
+# Use of this source code is governed by a ISC-style
+# license that can be found in the LICENSE file or at
+# https://opensource.org/licenses/ISC
 #
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-Identifier: ISC
 
 import unittest
 from parameterized import parameterized
 import os
+from os.path import exists
 import sys
 import tempfile
 import itertools
@@ -28,13 +21,20 @@ import subprocess
 from fasm2bels.fasm2bels import main
 
 
-test_names = ["add32"]
+test_names = ["add32","alu"]
 
 
 def unpack_tar(tar_file):
     tar = tarfile.open(name=tar_file, mode="r:gz")
     tar.extractall(path=os.path.dirname(tar_file))
 
+def create_golden_file(file_name, part):
+    #vivado = os.environ.get('VIVADO_PATH', None) 
+    #assert vivado is not None, "VIVADO_PATH enviromental variable was not set! Please use export VIVADO_PATH=(path to vivado)"
+    vivado = "./opt/Xilinx/Vivado/2017.2/bin/vivado"
+    golden_file_temp_dir = tempfile.TemporaryDirectory()
+    subprocess.run([vivado, "-nolog", "-nojournal", "-mode", "batch", "-source", "create_golden_file.tcl", "-tclargs", file_name, golden_file_temp_dir.name, part])
+    return golden_file_temp_dir    
 
 class TestEquivalence(unittest.TestCase):
     @classmethod
@@ -72,6 +72,8 @@ class TestEquivalence(unittest.TestCase):
         drive = '12'
         top = 'top'
         part = 'xc7a35tcpg236-1'
+
+        golden_file_temp_dir = create_golden_file(test_name, part)
 
         generated_top_v = os.path.join(temp_dir, 'top_bit.v')
         generated_top_xdc = os.path.join(temp_dir, 'top_bit.xdc')
@@ -196,7 +198,9 @@ class TestEquivalence(unittest.TestCase):
             return True
 
         self.assertTrue(compare(os.path.join(
-            cur_dir, 'equivalence_checking_data', test_name, 'top_bit.golden.v'), tmp_top_v))
+            golden_file_temp_dir.name, 'top_bit.golden.v'), tmp_top_v))
+
+        golden_file_temp_dir.cleanup()
 
 
 if __name__ == "__main__":
