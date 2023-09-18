@@ -17,8 +17,10 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+import os
 import sqlite3
 from ..lib.progressbar_utils import ProgressBar
+
 """
 This is a database cache. Its a kind of proxy object for Python sqlite3 connection
 which operates on a memory copy of the database.
@@ -32,7 +34,6 @@ operations are then pefromed on this copy which yields in performance increase.
 
 class DatabaseCache(object):
     def __init__(self, file_name, read_only=False):
-
         self.file_name = file_name
         self.read_only = read_only
         self.bar = None
@@ -53,9 +54,8 @@ class DatabaseCache(object):
         self.file_connection = sqlite3.connect(uri, uri=True)
 
         # Load the database
-        print("Loading database from '{}'".format(self.file_name))
-        self.file_connection.backup(
-            self.memory_connection, pages=100, progress=self._progress)
+        print("Loading database from '{}'".format(os.path.abspath(self.file_name)))
+        self.file_connection.backup(self.memory_connection, pages=100, progress=self._progress)
 
         self.bar.finish()
         self.bar = None
@@ -74,9 +74,8 @@ class DatabaseCache(object):
                 assert exc_type is not None, "Outstanding transaction, but no exception?"
                 self.memory_connection.rollback()
 
-            print("Dumping database to '{}'".format(self.file_name))
-            self.memory_connection.backup(
-                self.file_connection, pages=100, progress=self._progress)
+            print("Dumping database to '{}'".format(os.path.abspath(self.file_name)))
+            self.memory_connection.backup(self.file_connection, pages=100, progress=self._progress)
 
             self.bar.finish()
             self.bar = None
