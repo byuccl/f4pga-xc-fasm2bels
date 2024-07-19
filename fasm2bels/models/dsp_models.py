@@ -121,7 +121,10 @@ def cleanup_dsp(top, site):
         else:
             for site_obj in top.sites:
                 next_tile = site.tile
-                cur_Y = int(site.tile[-2:-1])
+                try:
+                    cur_Y = int(site.tile[-2:-1])
+                except:
+                    cur_Y = int(site.tile[-1])
                 next_Y = str(cur_Y + 5)
                 next_tile = next_tile[:next_tile.find('Y') + 1] + next_Y
                 if site_obj.tile == next_tile and site_obj.site.y == site.site.y + 1:
