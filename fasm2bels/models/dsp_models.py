@@ -355,15 +355,17 @@ def process_dsp48e1_site(top, features, set_features):
     else:
         bel.parameters['PREG'] = "1'b1"
 
-    if 'ZADREG' in set_features:
-        bel.parameters['ADREG'] = "1'b0"
-    else:
-        bel.parameters['ADREG'] = "1'b1"
+    # if 'ZADREG' in set_features:
+    #     bel.parameters['ADREG'] = "1'b0"
+    # else:
+    #     bel.parameters['ADREG'] = "1'b1"
+    bel.parameters['ADREG'] = "1'b1"
 
-    if 'ZDREG' in set_features:
-        bel.parameters['DREG'] = "1'b0"
-    else:
-        bel.parameters['DREG'] = "1'b1"
+    # if 'ZDREG' in set_features:
+    #     bel.parameters['DREG'] = "1'b0"
+    # else:
+    #     bel.parameters['DREG'] = "1'b1"
+    bel.parameters['DREG'] = "1'b1"
 
     if 'ZINMODEREG' in set_features:
         bel.parameters['INMODEREG'] = "1'b0"
