@@ -121,9 +121,9 @@ def cleanup_dsp(top, site):
         else:
             for site_obj in top.sites:
                 next_tile = site.tile
-                try:
+                if site.tile[-2].isnumeric():
                     cur_Y = int(site.tile[-2:-1])
-                except:
+                else:
                     cur_Y = int(site.tile[-1])
                 next_Y = str(cur_Y + 5)
                 next_tile = next_tile[:next_tile.find('Y') + 1] + next_Y
