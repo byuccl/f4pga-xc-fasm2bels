@@ -1251,9 +1251,9 @@ def process_bram36_site(top, features, set_features):
     bel.add_unconnected_port('DBITERR', None, direction="output")
     bel.map_bel_pin_to_cell_pin(bel.bel, 'DBITERR', 'DBITERR')
 
-    bel.add_unconnected_port('CASCADEINA', None, direction="input")
+    bel.connections['CASCADEINA'] = 1
     bel.map_bel_pin_to_cell_pin(bel.bel, 'CASCADEINA', 'CASCADEINA')
-    bel.add_unconnected_port('CASCADEINB', None, direction="input")
+    bel.connections['CASCADEINB'] = 1
     bel.map_bel_pin_to_cell_pin(bel.bel, 'CASCADEINB', 'CASCADEINB')
 
     bel.add_unconnected_port('CASCADEOUTA', None, direction="output")
