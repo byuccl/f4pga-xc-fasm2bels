@@ -1567,8 +1567,8 @@ class Site(object):
         sources = set(self.sources.keys())
 
         assert len(internal_sources & sinks) == 0, (internal_sources & sinks)
-        assert len(internal_sources & sources) == 0, (
-            internal_sources & sources)
+        assert len(internal_sources & sources) == 0, (internal_sources
+                                                      & sources)
 
         bel_ids = set()
         for bel in self.bels:
@@ -1851,8 +1851,8 @@ class WireAssignsBimap():
     def merge_wire_assigns_dict(self, wire_assigns_dict):
         """ Add additional wire assigns in the form of a sink to source list map. """
         assert len(
-            set(self.sink_to_source_wires.keys()) & set(wire_assigns_dict.
-                                                        keys())) == 0
+            set(self.sink_to_source_wires.keys())
+            & set(wire_assigns_dict.keys())) == 0
         for sink_wire, source_wires in wire_assigns_dict.items():
             for source_wire in source_wires:
                 self.add_wire(sink_wire, source_wire)
