@@ -4,6 +4,7 @@
 [submodule "third_party/prjxray"]
 	path = third_party/prjxray
 	url = https://github.com/byuccl/prjxray.git
+	branch = bfasst
 [submodule "third_party/RapidWright"]
 	path = third_party/RapidWright
 	url = https://github.com/Xilinx/RapidWright.git
