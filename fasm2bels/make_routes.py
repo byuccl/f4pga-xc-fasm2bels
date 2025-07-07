@@ -21,7 +21,7 @@ import functools
 
 from prjxray.tile_segbits import PsuedoPipType
 
-from .database.connection_db_utils import get_node_pkey, get_wires_in_node, get_wire
+from .database.connection_db_utils import get_node_pkey, get_wire, get_wires_in_node
 
 ZERO_NET = -1
 ONE_NET = -2
@@ -540,8 +540,17 @@ def expand_sink(
               (sink_node_pkey, ))
     site_wire_pkey = c.fetchone()[0]
     if site_wire_pkey is not None:
-        upstream_sink_wire_in_tile_pkey, pip = check_for_default(
-            wire_in_tile_pkey)
+        try:
+            upstream_sink_wire_in_tile_pkey, pip = check_for_default(
+                wire_in_tile_pkey)
+        except AssertionError as e:
+            # This means a gnd lut generator has been missed. Just pass for now
+            # (skipping will cause it to either be left empty or HARD0).
+            print(
+                f"Warning: Missed a gnd lut generator driving {tile_name}/{wire_name}"
+            )
+            upstream_sink_wire_in_tile_pkey = None
+            pip = None
 
         if upstream_sink_wire_in_tile_pkey is not None:
             if pip is not None:
